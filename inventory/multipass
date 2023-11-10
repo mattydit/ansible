@@ -1,0 +1,4 @@
+[kafka]
+Kafka1 ansible_ssh_host=10.13.31.13
+Kafka2 ansible_ssh_host=10.13.31.14
+Kafka3 ansible_ssh_host=10.13.31.15

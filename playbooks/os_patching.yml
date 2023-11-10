@@ -1,0 +1,16 @@
+---
+- name: OS Patching
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Update All packages
+      apt:
+        name: "*"
+        state: latest
+        update_cache: true
+
+    - name: Reboot the machine
+      reboot:
+        reboot_timeout: 3600
+      tags: reboot

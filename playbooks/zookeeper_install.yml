@@ -1,0 +1,67 @@
+---
+- name: Install Zookeeper
+  hosts: all
+  become: true
+
+  pre_tasks:
+    - name: Install dependencies
+      apt:
+        name:
+          - wget
+          - ca-certificates
+          - zip
+          - net-tools
+          - vim
+          - nano
+          - tar
+          - netcat
+          - default-jdk
+        state: present
+        update_cache: true
+
+    - name: Check java version
+      command: java --version
+      register: output
+
+    - name: Print java version
+      debug:
+        msg: "{{ output.stdout }}"
+
+    - name: Disable RAM swap
+      sysctl:
+        name: vm.swappiness
+        value: '1'
+        state: present
+    
+  tasks:
+    - name: Download Zookeeper and Kafka
+      get_url:
+        url: "https://downloads.apache.org/kafka/3.6.0/{{ kafka_version }}.tgz"
+        dest: "/home/{{ ansible_user }}"
+    
+    - name: Unarchive the file
+      unarchive:
+        src: "/home/{{ ansible_user }}/{{ kafka_version }}.tgz"
+        dest: "/home/{{ ansible_user }}"
+        remote_src: true
+    
+    - name: Move kafka to /etc/kafka
+      copy:
+        src: "/home/{{ ansible_user }}/{{ kafka_version }}/"
+        dest: "{{ kafka_dir }}"
+        remote_src: true
+
+    - name: Create /etc/init.d/zookeeper
+      template:
+        src: templates/zookeeper.j2
+        dest: /etc/init.d/zookeeper
+    
+    - name: Check the file permissions
+      file:
+        path: /etc/init.d/zookeeper
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Update RC
+      command: update-rc.d zookeeper defaults
