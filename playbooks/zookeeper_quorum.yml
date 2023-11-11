@@ -1,0 +1,47 @@
+---
+- name: Configure Zookeeper Quorum
+  hosts: all
+  become: true
+
+  pre_tasks:
+    - name: Stop Zookeeper if running
+      service:
+        name: zookeeper
+        state: stopped
+    
+  tasks:
+    - name: Create the data directory
+      file:
+        path: /data/zookeeper
+        state: directory
+        owner: ansible
+        group: ansible
+
+    - name: Create the myid file
+      file:
+        path: /data/zookeeper/myid
+        state: touch
+        owner: ansible
+        group: ansible
+    
+    - name: Add the zookeeper id
+      lineinfile:
+        path: /data/zookeeper/myid
+        insertbefore: BOF
+        line: "{{ zookeeper_id }}"
+    
+    - name: Remove the default zookeeper.properties
+      file:
+        path: "{{ kafka_dir }}/config/zookeeper.properties"
+        state: absent
+    
+    - name: Copy the zookeeper.properties template
+      template:
+        src: templates/zookeeper.properties.j2
+        dest: "{{ kafka_dir }}/config/zookeeper.properties"
+    
+  post_tasks:
+    - name: Start the Zookeeper service
+      service:
+        name: zookeeper
+        state: started

@@ -1,4 +1,4 @@
 [kafka]
-Kafka1 ansible_ssh_host=10.13.31.13
-Kafka2 ansible_ssh_host=10.13.31.14
-Kafka3 ansible_ssh_host=10.13.31.15
+Kafka1 ansible_ssh_host=10.13.31.13 zookeeper_id=1
+Kafka2 ansible_ssh_host=10.13.31.14 zookeeper_id=2
+Kafka3 ansible_ssh_host=10.13.31.15 zookeeper_id=3
