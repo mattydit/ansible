@@ -1,0 +1,44 @@
+---
+- name: Install Docker
+  hosts: tools
+  become: true
+
+  pre_tasks:
+    - name: Install dependencies
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+        update_cache: true
+    
+  tasks:
+    - name: Add Docker's official GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+    
+    - name: Add repo to sources
+      apt_repository:
+        repo: "deb https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable"
+        state: present
+
+    - name: Install Docker
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: present
+        update_cache: true
+    
+    - name: "Give {{ ansible_user }} permissions to run docker"
+      user:
+        name: "{{ ansible_user }}"
+        groups:
+          - docker
+        append: true
