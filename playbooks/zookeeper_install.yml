@@ -1,6 +1,6 @@
 ---
 - name: Install Zookeeper
-  hosts: all
+  hosts: kafka
   become: true
 
   pre_tasks:

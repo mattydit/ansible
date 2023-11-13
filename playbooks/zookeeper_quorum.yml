@@ -1,6 +1,6 @@
 ---
 - name: Configure Zookeeper Quorum
-  hosts: all
+  hosts: kafka
   become: true
 
   pre_tasks:
