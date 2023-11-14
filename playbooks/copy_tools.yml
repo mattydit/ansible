@@ -1,0 +1,13 @@
+---
+- name: Copy the docker compose files
+  hosts: tools
+  become: true
+
+  tasks:
+    - name: Copy the files
+      copy:
+        src: "./files/"
+        dest: /tools/
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0755'
