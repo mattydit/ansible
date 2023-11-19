@@ -3,9 +3,11 @@ version: '2'
 services:
   # https://github.com/yahoo/kafka-manager
   kafka-manager:
-    image: qnib/plain-kafka-manager
+    image: deltaprojects/kafka-manager
     network_mode: host
     environment:
-      ZOOKEEPER_HOSTS: "zookeeper1:2181,zookeeper2:2181,zookeeper3:2181"
+      ZK_HOSTS: "Kafka1:2181,Kafka2:2181,Kafka3:2181"
       APPLICATION_SECRET: change_me_please
+      KAFKA_MANAGER_USERNAME: admin
+      KAFKA_MANAGER_PASSWORD: password
     restart: always
