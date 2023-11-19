@@ -1,0 +1,58 @@
+---
+- name: Configure kafka
+  hosts: kafka
+  become: true
+
+  pre_tasks:
+    - name: Create the kafka directory
+      file:
+        path: /data/kafka
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+
+    - name: Increase hard file handle limits
+      pam_limits:
+        domain: '*'
+        limit_type: hard
+        limit_item: nofile
+        value: 100000
+    
+    - name: Increase soft file handle limits
+      pam_limits:
+        domain: '*'
+        limit_type: soft
+        limit_item: nofile
+        value: 100000
+
+    - name: Remove the default server.properties
+      file:
+        path: "{{ kafka_dir }}/config/server.properties"
+        state: absent
+  
+  tasks:
+    - name: Copy server.properties template
+      template:
+        src: templates/kafka/server.properties.j2
+        dest: "{{ kafka_dir }}/config/server.properties"
+
+    - name: Create /etc/init.d/kafka
+      template:
+        src: templates/kafka/kafka.j2
+        dest: /etc/init.d/kafka
+    
+    - name: Check the file permissions
+      file:
+        path: /etc/init.d/kafka
+        owner: root
+        group: root
+        mode: '0755'  
+
+    - name: Update RC
+      command: update-rc.d kafka defaults
+
+  post_tasks:
+    - name: Reboot the machine
+      reboot:
+        reboot_timeout: 3600
+      tags: reboot

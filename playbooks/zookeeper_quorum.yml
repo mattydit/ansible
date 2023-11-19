@@ -37,7 +37,7 @@
     
     - name: Copy the zookeeper.properties template
       template:
-        src: templates/zookeeper.properties.j2
+        src: templates/zookeeper/zookeeper.properties.j2
         dest: "{{ kafka_dir }}/config/zookeeper.properties"
     
   post_tasks:

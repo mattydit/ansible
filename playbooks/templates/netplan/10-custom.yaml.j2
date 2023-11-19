@@ -1,0 +1,8 @@
+network:
+    version: 2
+    ethernets:
+        extra0:
+            dhcp4: no
+            match:
+                macaddress: "{{ mac }}"
+            addresses: [{{ static_ip }}]

@@ -53,7 +53,7 @@
 
     - name: Create /etc/init.d/zookeeper
       template:
-        src: templates/zookeeper.j2
+        src: templates/zookeeper/zookeeper.j2
         dest: /etc/init.d/zookeeper
     
     - name: Check the file permissions

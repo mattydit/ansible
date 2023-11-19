@@ -1,7 +1,7 @@
 [kafka]
-Kafka1 ansible_ssh_host=10.13.31.13 zookeeper_id=1
-Kafka2 ansible_ssh_host=10.13.31.14 zookeeper_id=2
-Kafka3 ansible_ssh_host=10.13.31.15 zookeeper_id=3
+Kafka1 ansible_ssh_host=10.13.31.13 zookeeper_id=1 broker_id=1
+Kafka2 ansible_ssh_host=10.13.31.14 zookeeper_id=2 broker_id=2
+Kafka3 ansible_ssh_host=10.13.31.15 zookeeper_id=3 broker_id=3
 
 [tools]
 tools1 ansible_ssh_host=10.13.31.16
