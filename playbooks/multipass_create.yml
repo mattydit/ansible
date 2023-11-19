@@ -1,0 +1,13 @@
+---
+- name: Setup the multipass environment
+  hosts: localhost
+  gather_facts: yes
+  vars:
+    node_amount: 3
+
+  tasks:
+    - name: Launch new multipass VMs
+      shell: 
+        cmd: "multipass launch lts --name Kafka{{ item }} --network name=localbr,mode=manual --memory 4G --cpus 2 --disk 12G --cloud-init files/cloud-init.yml"
+        chdir: "{{ playbook_dir }}"
+      with_sequence: "start=1 end={{ node_amount }}"

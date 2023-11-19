@@ -1,0 +1,13 @@
+---
+users:
+  - default
+  - name: mat
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDAXu9pH00h5V+jTU2SEgRsBgsJ5MwYacWrqOd7ZBsVvKjDu+jS0uar80MODCJIyklRH18Gvgc28rUzAtlB0A6vUMJcg66jl/8H9pClF3T3Ld+fsCnQDPbwo6DqRl7vUr5ElbZnLLHTr7lyLQjqk+uyg5LAUTNvBnLPOgD2Gs8E0gsbQQ7nfwZDKk/yn0kXGhx4TOdwGilWC51Sxpb+zS2y/+N1y8rvbdfxGsrBgS7bHLMdZdQRVzBnyPflsUpYbQSx3M8iKKxwwghEPepTVR+eyGX4e3jyg1Bx/c5oCqchWIn6fz7TJfEESVFLt0xxz3NnC4wp9zsoGUqvdnyu+ueOIUZKXTU8Za+Wpn24X6x6D5ZdUHb9sMhsyWn7D4klDAgUwncfjj+v1/O/mBB/CwSFMy1+M3vTLjY7XW9CQ76wZHISpaGaiVZ5F7i9rQ/5voCt1ftc1fnqh71Uvsmn3OAbmOszVkvqgMx9/XbAtYXiJ1EgZ66tXsv8bIjoDS5p5yw+aHYakI81rDYiYMC8kXhnRQzrpByX+GkhMpBCuep1kejgCHzAMpFlgm/gsvKukM4K2jdeiIov/gi4whxB7H0Z85seNy7GLutNQl76rY148Cdnw/8YUIKayBLE4qTpxrzAQ4B6T+pV+qFGvh4dcx0TEc+nONSwRvtC2b8b8+srKQ== mat@pop-os
+  
+  - name: ansible
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCfnAZRPDykif0dz3CG2dRLTgUsiqLo8jdpeTy47+cb7PEf8A8PPbsuO2g2k5f+3JnRQXvfiJcHZogaVUkhkPD29EC+I5/X8UvQw41Mlh8sfB6vBHEuAsTxksPDEI7jRdYj0yEsheYQbu3bMyo8x74kC9T0Ewshk/j0XARrFjb9sVXtNZoVtNh0PvoFA785neS7ODiag/ySTWuO7ZJ49mS1fa19P+QbyrUL5x0RbM9EkOgvDTVRggTSdBbbXNxsf0yV3j2TD7VK3eeE4xiRLBe3O/CLW9T88AUJEVyKWv8cUZrYf53LRWwDiAdBaN/cCNpPMoPv+3pMgzjmnofgEBWGoH1VvrS2iy+Pnu9pPleCZy5Bt+WAUkw+XKh33bjN7ObcgtihDlHvegki7BE/LMDNmalvBFvTJEh4Zxo5hsc9WaBCCocXCQc+yjLS71LA9tGeC6OcmsPNIJ/RoN109oIxPDK2IQX92kuktthTS03tDps6PxZdYmleaUnNkMHVAzTZNWQkL6k06KMQGhxww243n2NSzsvgwXHFqVEzMxzeWzlTuRJLzoJRukf8v+6x5Uzqh/gnNGBux+Kmuvxexxvyiuh+Cr9/IWu+Ug5Shz0NNkSrUupV5vMFeJeDqGdTPqlC4OZgCF1e2eD9pfFZCM/EjZAryzsLzM6Y6tbDzPjixQ== mat@pop-os
+    

@@ -1,0 +1,24 @@
+---
+- name: Setup the multipass environment
+  hosts: all
+  gather_facts: yes
+  become: true
+
+  tasks:
+    - name: Get the MAC address
+      set_fact:
+        mac: "{{ ansible_facts[item]['macaddress'] | default(none) }}"
+      loop: "{{ ansible_interfaces }}"
+      when: item is match('enp6s0')
+    
+    - name: Show the MAC address
+      debug:
+        var: mac
+
+    - name: Set static IP on MAC
+      template:
+        src: templates/netplan/10-custom.yaml.j2
+        dest: /etc/netplan/10-custom.yaml
+
+    - name: netplan apply
+      command: netplan apply
