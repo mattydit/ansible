@@ -1,0 +1,4 @@
+prometheus_ver: prometheus-2.45.1.linux-amd64.tar.gz
+grafana_download: https://dl.grafana.com/enterprise/release/grafana-enterprise_10.2.2_amd64.deb
+anonymous_access: true
+org_role: Admin

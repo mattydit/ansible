@@ -1,0 +1,4 @@
+---
+zookeeper_quorum: Kafka1:2181,Kafka2:2181,Kafka3:2181
+bootstrap_servers: Kafka1:9092,Kafka2:9092,Kafka3:9092
+prometheus_ver: prometheus-2.45.1.linux-amd64.tar.gz
