@@ -30,18 +30,27 @@
         insertbefore: BOF
         line: "{{ zookeeper_id }}"
     
-    - name: Remove the default zookeeper.properties
-      file:
-        path: "{{ kafka_dir }}/config/zookeeper.properties"
-        state: absent
     
     - name: Copy the zookeeper.properties template
       template:
         src: templates/zookeeper/zookeeper.properties.j2
         dest: "{{ kafka_dir }}/config/zookeeper.properties"
+
+    - name: Create /etc/systemd/system/zookeeper
+      template:
+        src: templates/zookeeper/zookeeper.service.j2
+        dest: /etc/systemd/system/zookeeper.service
+        owner: root
+        group: root
+        mode: '0755'  
+
+    - name: Update Systemctl
+      systemd:  
+        daemon_reload: true
     
   post_tasks:
     - name: Start the Zookeeper service
       service:
         name: zookeeper
         state: started
+      tags: start

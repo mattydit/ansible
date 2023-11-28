@@ -50,18 +50,3 @@
         src: "/home/{{ ansible_user }}/{{ kafka_version }}/"
         dest: "{{ kafka_dir }}"
         remote_src: true
-
-    - name: Create /etc/init.d/zookeeper
-      template:
-        src: templates/zookeeper/zookeeper.j2
-        dest: /etc/init.d/zookeeper
-    
-    - name: Check the file permissions
-      file:
-        path: /etc/init.d/zookeeper
-        owner: root
-        group: root
-        mode: '0755'
-
-    - name: Update RC
-      command: update-rc.d zookeeper defaults

@@ -25,10 +25,6 @@
         limit_item: nofile
         value: 100000
 
-    - name: Remove the default server.properties
-      file:
-        path: "{{ kafka_dir }}/config/server.properties"
-        state: absent
   
   tasks:
     - name: Copy server.properties template
@@ -36,20 +32,17 @@
         src: templates/kafka/server.properties.j2
         dest: "{{ kafka_dir }}/config/server.properties"
 
-    - name: Create /etc/init.d/kafka
+    - name: Create /etc/systemd/system/kafka
       template:
-        src: templates/kafka/kafka.j2
-        dest: /etc/init.d/kafka
-    
-    - name: Check the file permissions
-      file:
-        path: /etc/init.d/kafka
+        src: templates/kafka/kafka.service.j2
+        dest: /etc/systemd/system/kafka.service
         owner: root
         group: root
         mode: '0755'  
 
-    - name: Update RC
-      command: update-rc.d kafka defaults
+    - name: Update Systemctl
+      systemd:  
+        daemon_reload: true
 
   post_tasks:
     - name: Reboot the machine
