@@ -1,0 +1,14 @@
+[Unit]
+Description=Zookeeper
+After=network.target
+
+[Service]
+User=root
+Group=root
+SyslogIdentifier=zookeeper
+Environment="EXTRA_ARGS=-javaagent:/etc/prometheus/jmx_prometheus_javaagent-0.19.0.jar=7070:/etc/prometheus/zookeeper.yml"
+ExecStart={{ kafka_dir }}/bin/zookeeper-server-start.sh {{ kafka_dir }}/config/zookeeper.properties
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target

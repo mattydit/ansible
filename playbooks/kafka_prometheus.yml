@@ -1,0 +1,101 @@
+---
+- name: Configure monitoring for Kafka
+  hosts: kafka
+  become: true
+
+  tasks:
+    - name: Create the /etc/prometheus directory
+      file:
+        path: /etc/prometheus
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0755'
+    
+    - name: Get prometheus agent jar
+      get_url:
+        url: "https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.19.0/{{ prometheus_jar }}"
+        dest: "/etc/prometheus"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0755'
+    
+    - name: Copy the prometheus kafka config
+      template:
+        src: "templates/kafka/kafka-2_0_0.yml.j2"
+        dest: "/etc/prometheus/kafka-2_0_0.yml"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0755'
+
+    - name: Copy the prometheus zookeeper config
+      template:
+        src: "templates/zookeeper/zookeeper.yml.j2"
+        dest: "/etc/prometheus/zookeeper.yml"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0755'
+    
+    - name: Download prometheus on tool host
+      get_url:
+        url: "https://github.com/prometheus/prometheus/releases/download/v2.45.1/{{ prometheus_ver }}"
+        dest: /tools/
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0755'
+      delegate_to: tools1
+      run_once: true
+
+    - name: Ensure the prometheus directory exists
+      file:
+        path: /tools/prometheus
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0755'
+      delegate_to: tools1
+      run_once: true
+    
+    - name: Unarchive prometheus
+      unarchive:
+        src: "/tools/{{ prometheus_ver }}"
+        dest: /tools/prometheus
+        remote_src: true
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0755'
+        extra_opts: [--strip-components=1]
+      delegate_to: tools1
+      run_once: true
+
+    - name: Copy config template
+      template:
+        src: templates/kafka/prometheus.yml.j2
+        dest: /tools/prometheus/prometheus.yml
+      delegate_to: tools1
+      run_once: true
+
+    - name: Copy service template
+      template:
+        src:  templates/kafka/prometheus.service.j2
+        dest: /etc/systemd/system/prometheus.service
+        owner: root
+        group: root
+        mode: '0755'  
+      delegate_to: tools1
+      run_once: true
+
+  post_tasks:
+    - name: Update Systemctl
+      systemd:  
+        daemon_reload: true
+      delegate_to: tools1
+      run_once: true
+
+    - name: cleanup downloads
+      file:
+        path: "/tools/{{ prometheus_ver }}"
+        state: absent
+      delegate_to: tools1
+      run_once: true
+

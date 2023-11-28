@@ -1,0 +1,27 @@
+---
+- name: Install Grafana
+  hosts: tools
+  become: true
+
+  pre_tasks:
+    - name: Install dependencies
+      apt:
+        name:
+          - adduser
+          - libfontconfig1 
+          - musl
+          - xz-utils
+        state: present
+        update_cache:  true
+
+  tasks:
+    - name: "Install grafana from {{ grafana_download }}"
+      apt:
+        deb: "{{ grafana_download }}"
+
+    - name: Copy grafana.ini template
+      template:
+        src: templates/grafana/grafana.ini.j2
+        dest: /etc/grafana/grafana.ini
+        owner: root
+        group: grafana

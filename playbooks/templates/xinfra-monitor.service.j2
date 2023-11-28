@@ -1,0 +1,14 @@
+# /etc/systemd/system/kafka-monitor.service
+[Unit]
+Description=Xinfra Monitor
+After=network.target
+
+[Service]
+User=ansible
+Group=ansible
+WorkingDirectory=/tools/kafka-monitor
+ExecStart=/tools/kafka-monitor/bin/xinfra-monitor-start.sh /tools/kafka-monitor/config/xinfra-monitor.properties
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target

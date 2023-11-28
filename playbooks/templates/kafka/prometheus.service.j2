@@ -1,0 +1,12 @@
+# /etc/systemd/system/prometheus.service
+[Unit]
+Description=Prometheus Server
+Documentation=https://prometheus.io/docs/introduction/overview/
+After=network-online.target
+
+[Service]
+User=root
+ExecStart=/tools/prometheus/prometheus --config.file=/tools/prometheus/prometheus.yml --storage.tsdb.path=/tools/prometheus/data
+
+[Install]
+WantedBy=multi-user.target

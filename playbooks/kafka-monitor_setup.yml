@@ -1,0 +1,47 @@
+---
+- name: Setup Kafka-Monitor
+  hosts: tools
+  become: true
+
+  pre_tasks:
+    - name: Install dependencies
+      apt:
+        name:
+          - default-jdk
+        state: present
+        update_cache: true
+
+  tasks:
+    - name: Clone the Kafka-Monitor repo
+      git:
+        repo: 'https://github.com/linkedin/kafka-monitor.git'
+        dest: "{{ lookup('env', 'HOME') }}/kafka-monitor"
+        version: master
+      delegate_to: localhost
+
+    - name: Build Kafka-Monitor
+      command: "./gradlew jar"
+      args:
+        chdir: "{{ lookup('env', 'HOME') }}/kafka-monitor"
+      delegate_to: localhost
+      tags: build
+
+    - name: Copy to destination
+      copy:
+        src: /home/mat/kafka-monitor
+        dest: /tools
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0755'
+      tags: build
+    
+    - name: Copy xinfra-monitor.properties template
+      template:
+        src: templates/xinfra-monitor.service.j2
+        dest: /etc/systemd/system/kafka-monitor.service
+        owner: root
+        group: root
+        mode: '0755'
+
+
+
