@@ -1,7 +1,8 @@
 ---
 - name: Install Zookeeper
-  hosts: kafka
+  hosts: all
   become: true
+  vars:
 
   pre_tasks:
     - name: Install dependencies
@@ -32,6 +33,9 @@
         name: vm.swappiness
         value: '1'
         state: present
+      tags: 
+        - disable_swap
+        - always
     
   tasks:
     - name: Download Zookeeper and Kafka
@@ -45,8 +49,15 @@
         dest: "/home/{{ ansible_user }}"
         remote_src: true
     
-    - name: Move kafka to /etc/kafka
+    - name: "Move kafka to {{ kafka_dir }}"
       copy:
         src: "/home/{{ ansible_user }}/{{ kafka_version }}/"
         dest: "{{ kafka_dir }}"
         remote_src: true
+
+  post_tasks:
+    - name: "Add {{ kafka_dir }} to PATH"
+      copy:
+        dest: /etc/profile.d/kafka-path.sh
+        content: 'PATH=$PATH:{{ kafka_dir }}/bin'
+        mode: '0644'

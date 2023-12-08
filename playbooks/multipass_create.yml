@@ -4,10 +4,11 @@
   gather_facts: yes
   vars:
     node_amount: 3
+    memory: 4G
 
   tasks:
     - name: Launch new multipass VMs
       shell: 
-        cmd: "multipass launch lts --name Kafka{{ item }} --network name=localbr,mode=manual --memory 4G --cpus 2 --disk 12G --cloud-init files/cloud-init.yml"
+        cmd: "multipass launch lts --name {{ vm_name }}{{ item }} --network name=localbr,mode=manual --memory {{ memory }} --cpus 2 --disk 12G --cloud-init files/cloud-init.yml"
         chdir: "{{ playbook_dir }}"
       with_sequence: "start=1 end={{ node_amount }}"

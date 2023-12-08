@@ -1,5 +1,4 @@
 ---
-kafka_version: kafka_2.12-3.6.0
 kafka_dir: /etc/kafka
 zookeeper_data_dir: /data/zookeeper
 zookeeper_port: 2181
