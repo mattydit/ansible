@@ -1,6 +1,6 @@
 ---
 - name: Setup the multipass environment
-  hosts: all
+  hosts: "{{ vm_name | lower }}"
   gather_facts: yes
   become: true
 

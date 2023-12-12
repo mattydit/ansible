@@ -1,0 +1,21 @@
+---
+
+- name: List multipass VMs
+  shell: "multipass list | grep {{ vm_name }}"
+  register: output
+
+- name: Print the output
+  debug:
+    msg: "{{ (item.split(' ') | select)[0] }} - {{ (item.split(' ') | select)[2] }}"
+  loop: "{{ output.stdout_lines }}"
+
+- name: Add host to inventory
+  add_host:
+    hostname: '{{ vm_name }}{{ ansible_loop.index }}'
+    ansible_ssh_host: "{{ (item.split(' ') | select)[2] }}"
+    groups:
+      - '{{ vm_name | lower }}'
+    static_ip: "{{ static_ips[ansible_loop.index - 1] }}"
+  loop: "{{ output.stdout_lines }}"
+  loop_control:
+    extended: true
