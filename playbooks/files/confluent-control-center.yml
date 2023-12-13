@@ -9,7 +9,7 @@ services:
       ports:
         - "9021:9021"
       environment:
-        CONTROL_CENTER_BOOTSTRAP_SERVERS: 'Kafka1:9092,Kafka2:9092,Kafka3:9092'
+        CONTROL_CENTER_BOOTSTRAP_SERVERS: 'Kafka-cp1:9092,Kafka-cp2:9092,Kafka-cp3:9092'
   #      CONTROL_CENTER_CONNECT_CONNECT-DEFAULT_CLUSTER: 'connect:8083'
   #      CONTROL_CENTER_CONNECT_HEALTHCHECK_ENDPOINT: '/connectors'
   #      CONTROL_CENTER_KSQL_KSQLDB1_URL: "http://ksqldb-server:8088"

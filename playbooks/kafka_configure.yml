@@ -1,6 +1,6 @@
 ---
 - name: Configure kafka
-  hosts: kafka
+  hosts: kafka, kafka-cp
   become: true
 
   pre_tasks:

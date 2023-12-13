@@ -38,14 +38,14 @@
         - always
     
   tasks:
-    - name: Download Zookeeper and Kafka
+    - name: "Download {{ kafka_version }}"
       get_url:
-        url: "https://downloads.apache.org/kafka/3.6.0/{{ kafka_version }}.tgz"
+        url: "{{ kafka_url }}{{ kafka_version }}{{ file_extension }}"
         dest: "/home/{{ ansible_user }}"
     
     - name: Unarchive the file
       unarchive:
-        src: "/home/{{ ansible_user }}/{{ kafka_version }}.tgz"
+        src: "/home/{{ ansible_user }}/{{ kafka_version }}{{ file_extension }}"
         dest: "/home/{{ ansible_user }}"
         remote_src: true
     

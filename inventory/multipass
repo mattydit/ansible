@@ -3,5 +3,12 @@ Kafka1 ansible_ssh_host=10.13.31.13 zookeeper_id=1 broker_id=1
 Kafka2 ansible_ssh_host=10.13.31.14 zookeeper_id=2 broker_id=2
 Kafka3 ansible_ssh_host=10.13.31.15 zookeeper_id=3 broker_id=3
 
+[kafka-cp]
+Kafka-cp1 ansible_ssh_host=10.13.31.17 zookeeper_id=1 broker_id=1
+Kafka-cp2 ansible_ssh_host=10.13.31.18 zookeeper_id=2 broker_id=2
+Kafka-cp3 ansible_ssh_host=10.13.31.19 zookeeper_id=3 broker_id=3
+
 [tools]
 tools1 ansible_ssh_host=10.13.31.16
+tools-cp1 ansible_ssh_host=10.13.31.20
+

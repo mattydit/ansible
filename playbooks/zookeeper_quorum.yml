@@ -1,13 +1,13 @@
 ---
 - name: Configure Zookeeper Quorum
-  hosts: kafka
+  hosts: kafka, kafka-cp
   become: true
 
-  pre_tasks:
-    - name: Stop Zookeeper if running
-      service:
-        name: zookeeper
-        state: stopped
+  # pre_tasks:
+  #   - name: Stop Zookeeper if running
+  #     service:
+  #       name: zookeeper
+  #       state: stopped
     
   tasks:
     - name: Create the data directory
@@ -30,6 +30,10 @@
         insertbefore: BOF
         line: "{{ zookeeper_id }}"
     
+    - name: Create the config directory
+      file:
+        path: "{{ kafka_dir }}/config"
+        state: directory
     
     - name: Copy the zookeeper.properties template
       template:

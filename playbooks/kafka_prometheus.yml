@@ -1,6 +1,6 @@
 ---
 - name: Configure monitoring for Kafka
-  hosts: kafka
+  hosts: kafka, kafka-cp
   become: true
 
   tasks:
@@ -43,7 +43,7 @@
         owner: "{{ ansible_user }}"
         group: "{{ ansible_user }}"
         mode: '0755'
-      delegate_to: tools1
+      delegate_to: "{{ tools_host }}"
       run_once: true
       tags: tools_host
 
@@ -54,7 +54,7 @@
         owner: "{{ ansible_user }}"
         group: "{{ ansible_user }}"
         mode: '0755'
-      delegate_to: tools1
+      delegate_to: "{{ tools_host }}"
       run_once: true
       tags: tools_host
     
@@ -67,7 +67,7 @@
         group: "{{ ansible_user }}"
         mode: '0755'
         extra_opts: [--strip-components=1]
-      delegate_to: tools1
+      delegate_to: "{{ tools_host }}"
       run_once: true
       tags: tools_host
 
@@ -75,7 +75,7 @@
       template:
         src: templates/kafka/prometheus.yml.j2
         dest: /tools/prometheus/prometheus.yml
-      delegate_to: tools1
+      delegate_to: "{{ tools_host }}"
       run_once: true
       tags: tools_host
 
@@ -86,7 +86,7 @@
         owner: root
         group: root
         mode: '0755'  
-      delegate_to: tools1
+      delegate_to: "{{ tools_host }}"
       run_once: true
       tags: tools_host
 
@@ -94,7 +94,7 @@
     - name: Update Systemctl
       systemd:  
         daemon_reload: true
-      delegate_to: tools1
+      delegate_to: "{{ tools_host }}"
       run_once: true
       tags: tools_host
 
@@ -102,7 +102,7 @@
       file:
         path: "/tools/{{ prometheus_ver }}"
         state: absent
-      delegate_to: tools1
+      delegate_to: "{{ tools_host }}"
       run_once: true
       tags: tools_host
 

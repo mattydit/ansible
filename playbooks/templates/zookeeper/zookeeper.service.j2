@@ -6,8 +6,9 @@ After=network.target
 User=root
 Group=root
 SyslogIdentifier=zookeeper
-Environment="EXTRA_ARGS=-javaagent:/etc/prometheus/jmx_prometheus_javaagent-0.19.0.jar=7070:/etc/prometheus/zookeeper.yml"
-ExecStart={{ kafka_dir }}/bin/zookeeper-server-start.sh {{ kafka_dir }}/config/zookeeper.properties
+Environment="JMX_PORT=2020"
+# Environment="EXTRA_ARGS=-javaagent:/etc/prometheus/jmx_prometheus_javaagent-0.19.0.jar=7070:/etc/prometheus/zookeeper.yml"
+ExecStart={{ kafka_dir }}/bin/zookeeper-server-start {{ kafka_dir }}/config/zookeeper.properties
 SuccessExitStatus=143
 
 [Install]
