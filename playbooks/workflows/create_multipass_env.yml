@@ -4,16 +4,12 @@
   import_playbook: ../multipass_create.yml
   vars:
     vm_name: "{{ kafka_vm_name }}"
-  
-- name: Add hosts to inventory
-  import_playbook: playbooks/multipass.yml
-  vars:
     node_amount: 3
     static_ips:
-      - 10.13.31.17/24
-      - 10.13.31.18/24
-      - 10.13.31.19/24
-      # - 10.13.31.20/24
+      # - 10.13.31.17/24
+      # - 10.13.31.18/24
+      # - 10.13.31.19/24
+      - 10.13.31.20/24
 
 - name: Add static IPs
   import_playbook: ../multipass_env.yml

@@ -1,8 +1,0 @@
----
-- hosts: localhost
-  gather_facts: yes
-  vars:
-    vm_name: "{{ kafka_vm_name }}"
-
-  tasks:
-    - include_tasks: ../../tasks/multipass_tasks.yml

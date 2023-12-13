@@ -14,3 +14,6 @@
         cmd: "multipass launch lts --name {{ vm_name }}{{ item }} --network name=localbr,mode=manual --memory {{ memory }} --cpus {{ cpus }} --disk {{ disk_size }} --cloud-init files/cloud-init.yml"
         chdir: "{{ playbook_dir }}"
       with_sequence: "start=1 end={{ node_amount }}"
+
+    - name: Add to inventory
+      include_tasks: tasks/multipass_tasks.yml
