@@ -5,13 +5,13 @@ scrape_configs:
  - job_name: 'kafka'
    static_configs:
     - targets:
-      - Kafka1:7071
-      - Kafka2:7071
-      - Kafka3:7071
+      - Kafka-cp1:2021
+      - Kafka-cp2:2021
+      - Kafka-cp3:2021
  - job_name: 'zookeeper'
    static_configs:
     - targets:
-      - Kafka1:7070
-      - Kafka2:7070
-      - Kafka3:7070
+      - Kafka-cp1:2020
+      - Kafka2-cp2:2020
+      - Kafka3-cp3:2020
 

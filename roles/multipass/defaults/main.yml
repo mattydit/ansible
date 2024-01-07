@@ -1,0 +1,14 @@
+---
+#VM creation
+node_amount: 3
+memory: 4G
+cpus: 2
+disk_size: 12G
+
+vm_name: virtual-machine
+static_ips:
+  # - 10.13.31.17/24
+  # - 10.13.31.18/24
+  # - 10.13.31.19/24
+  # - 10.13.31.20/24
+  - 10.13.31.21/24

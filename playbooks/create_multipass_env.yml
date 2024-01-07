@@ -1,4 +1,10 @@
 ---
+
+- name: Create the hosts in multipass
+  hosts: localhost
+  roles:
+    - ../roles/multipass
+
 - name: Setup the multipass environment
   hosts: "{{ vm_name | lower }}"
   gather_facts: yes

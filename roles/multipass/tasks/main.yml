@@ -1,0 +1,7 @@
+---
+
+- name: Create multipass VMs
+  include_tasks: create.yml
+
+- name: Add to inventory
+  include_tasks: add_inventory.yml
