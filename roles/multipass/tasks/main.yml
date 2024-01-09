@@ -5,3 +5,4 @@
 
 - name: Add to inventory
   include_tasks: add_inventory.yml
+  when: driver == 'lxd'

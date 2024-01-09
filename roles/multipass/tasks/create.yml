@@ -1,7 +1,16 @@
 ---
+
+- name: Include driver check
+  include_tasks: driver.yml
+
+- name: network name=localbr,mode=manual
+  set_fact:
+    network: "--network name=localbr,mode=manual" 
+  when: driver == 'lxd'
+
 - name: Launch new multipass VMs
   shell: 
-    cmd: "multipass launch lts --name {{ vm_name }}{{ item }} --network name=localbr,mode=manual --memory {{ memory }} --cpus {{ cpus }} --disk {{ disk_size }} --cloud-init files/cloud-init.yml"
+    cmd: "multipass launch lts --name {{ vm_name }}{{ item }}  {{ network | default(none) }} --memory {{ memory }} --cpus {{ cpus }} --disk {{ disk_size }} --cloud-init files/cloud-init.yml"
     chdir: "{{ playbook_dir }}"
   with_sequence: "start=1 end={{ node_amount }}"
 

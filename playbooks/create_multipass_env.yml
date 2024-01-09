@@ -20,11 +20,17 @@
     - name: Show the MAC address
       debug:
         var: mac
+    
+    - name: Include driver check
+      include_tasks: ../roles/multipass/tasks/driver.yml
 
-    - name: Set static IP on MAC
-      template:
-        src: templates/netplan/10-custom.yaml.j2
-        dest: /etc/netplan/10-custom.yaml
+    - name: Static IP
+      block:
+        - name: Set static IP on MAC
+          template:
+            src: templates/netplan/10-custom.yaml.j2
+            dest: /etc/netplan/10-custom.yaml
 
-    - name: netplan apply
-      command: netplan apply
+        - name: netplan apply
+          command: netplan apply
+      when: driver == 'lxd'

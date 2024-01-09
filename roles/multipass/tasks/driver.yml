@@ -1,0 +1,13 @@
+---
+- name: Get multipass local.driver
+  command: multipass get local.driver
+  register: output
+  delegate_to: localhost
+    
+- name: Show local.driver
+  debug:
+    msg: "{{ output.stdout }}"
+
+- name: Set driver fact
+  set_fact:
+    driver: "{{ output.stdout }}"
