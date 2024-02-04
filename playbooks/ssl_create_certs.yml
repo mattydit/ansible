@@ -1,0 +1,50 @@
+---
+- name: SSL setup
+  hosts: kafka-cp
+  gather_facts: true
+  become: true
+
+  tasks:
+    - name: Create the ssl directory
+      file:
+        path: "/home/{{ ansible_user }}/ssl"
+        state: directory
+        mode: '0755'
+      delegate_to: "{{ tools_host }}"
+      run_once: true
+
+    - name: Create the CA
+      shell: openssl req -new -newkey rsa:4096 -days 365 -x509 -subj "/CN=Kafka-Security-CA" -keyout ca-key -out ca-cert -nodes
+      args:
+        chdir: "/home/{{ ansible_user }}/ssl"
+      delegate_to: "{{ tools_host }}"
+      run_once: true
+      tags: create_ca
+
+    - name: "Fetch the file from {{ tools_host }}"
+      run_once: true
+      fetch:
+        src: /home/{{ ansible_user }}/ssl/ca-cert 
+        dest: buffer/
+        flat: true
+      delegate_to: "{{ tools_host }}"
+
+    - name: "Copy CA to {{ play_hosts }}"
+      copy:
+        src: "buffer/ca-cert"
+        dest: "/home/{{ ansible_user }}"
+
+    - name: Create the server cert
+      shell: 'keytool -genkey -keystore kafka.server.keystore.jks -validity 365 -storepass {{ keypass }} -keypass {{ keypass }}  -dname "CN={{ ansible_hostname }}" -storetype pkcs12'
+      args:
+        chdir: '/tools/ssl'
+      with_inventory_hostnames: "{{ play_hosts }}"
+      delegate_to: "{{ tools_host }}"
+      run_once: true 
+      
+    # - name: show all hosts in group
+    #   debug:
+    #     msg: "{{ item }}"
+    #   with_inventory_hostnames: "{{ play_hosts }}"
+    #   delegate_to: tools_host
+    #   run_once: true
