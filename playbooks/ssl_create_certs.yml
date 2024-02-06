@@ -3,6 +3,7 @@
   hosts: kafka-cp
   gather_facts: true
   become: true
+  # serial: 1
 
   tasks:
     - name: Create the ssl directory
@@ -21,27 +22,69 @@
       run_once: true
       tags: create_ca
 
-    - name: "Fetch the file from {{ tools_host }}"
-      run_once: true
-      fetch:
-        src: /home/{{ ansible_user }}/ssl/ca-cert 
-        dest: buffer/
-        flat: true
+    - name: Generete the server certs
+      block:
+        - name: Create the cert directory
+          file:
+            path: '/home/{{ ansible_user }}/ssl/{{ ansible_hostname }}'
+            state: directory
+          delegate_to: "{{ tools_host }}"
+
+        - name: Create the server cert
+          shell: 'keytool -genkey -keystore kafka.server.keystore.jks -validity 365 -storepass {{ keypass }} -keypass {{ keypass }}  -dname "CN={{ ansible_hostname }}" -storetype pkcs12'
+          args:
+            chdir: '/home/{{ ansible_user }}/ssl/{{ ansible_hostname }}'
+          delegate_to: "{{ tools_host }}"
+
+        - name: Create a cert request file
+          shell: 'keytool -keystore kafka.server.keystore.jks -certreq -file cert-file -storepass {{ keypass }} -keypass {{ keypass }}'
+          args:
+            chdir: '/home/{{ ansible_user }}/ssl/{{ ansible_hostname }}'
+          delegate_to: "{{ tools_host }}"
+
+        - name: Sign the server cert
+          shell: 'openssl x509 -req -CA ../ca-cert -CAkey ../ca-key -in cert-file -out cert-signed -days 365 -CAcreateserial -passin pass:{{ keypass }}'
+          args:
+            chdir: '/home/{{ ansible_user }}/ssl/{{ ansible_hostname }}'
+          delegate_to: "{{ tools_host }}"
+
+        - name: Create the truststore
+          shell: 'keytool -keystore kafka.server.truststore.jks -alias CARoot -import -file ../ca-cert -storepass {{ keypass }} -keypass {{ keypass }} -noprompt'
+          args:
+            chdir: '/home/{{ ansible_user }}/ssl/{{ ansible_hostname }}'
+          delegate_to: "{{ tools_host }}"
+
+        - name: Import the CA into the jks keystore
+          shell: 'keytool -keystore kafka.server.keystore.jks -alias CARoot -import -file ../ca-cert -storepass {{ keypass }} -keypass {{ keypass }} -noprompt'
+          args:
+            chdir: '/home/{{ ansible_user }}/ssl/{{ ansible_hostname }}'
+          delegate_to: "{{ tools_host }}"
+
+        - name: Import the signed server cert into the jks keystore
+          shell: 'keytool -keystore kafka.server.keystore.jks -import -file cert-signed -storepass {{ keypass }} -keypass {{ keypass }} -noprompt'
+          args:
+            chdir: '/home/{{ ansible_user }}/ssl/{{ ansible_hostname }}'
+          delegate_to: "{{ tools_host }}"
+
+        - name: "Fetch the file from {{ tools_host }}"
+          fetch:
+            src: '/home/{{ ansible_user }}/ssl/{{ ansible_hostname }}/kafka.server.keystore.jks'
+            dest: 'buffer/{{ ansible_hostname }}/'
+            flat: true
+          delegate_to: "{{ tools_host }}"
+
+        - name: "Copy cert to {{ play_hosts }}"
+          copy:
+            src: "buffer/{{ ansible_hostname }}/kafka.server.keystore.jks"
+            dest: "/home/{{ ansible_user }}"
+
+  post_tasks:
+    - name: Cleanup
+      file:
+        path: '/home/{{ ansible_user }}/ssl/{{ ansible_hostname }}'
+        state: absent
       delegate_to: "{{ tools_host }}"
 
-    - name: "Copy CA to {{ play_hosts }}"
-      copy:
-        src: "buffer/ca-cert"
-        dest: "/home/{{ ansible_user }}"
-
-    - name: Create the server cert
-      shell: 'keytool -genkey -keystore kafka.server.keystore.jks -validity 365 -storepass {{ keypass }} -keypass {{ keypass }}  -dname "CN={{ ansible_hostname }}" -storetype pkcs12'
-      args:
-        chdir: '/tools/ssl'
-      with_inventory_hostnames: "{{ play_hosts }}"
-      delegate_to: "{{ tools_host }}"
-      run_once: true 
-      
     # - name: show all hosts in group
     #   debug:
     #     msg: "{{ item }}"
