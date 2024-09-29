@@ -4,11 +4,21 @@ Kafka2 ansible_ssh_host=10.13.31.14 zookeeper_id=2 broker_id=2
 Kafka3 ansible_ssh_host=10.13.31.15 zookeeper_id=3 broker_id=3
 
 [kafka-cp]
-Kafka-cp1 ansible_ssh_host=10.13.31.17 zookeeper_id=1 broker_id=1
-Kafka-cp2 ansible_ssh_host=10.13.31.18 zookeeper_id=2 broker_id=2
-Kafka-cp3 ansible_ssh_host=10.13.31.19 zookeeper_id=3 broker_id=3
+Kafka-cp1 ansible_ssh_host=10.61.191.118 zookeeper_id=1 broker_id=1
+Kafka-cp2 ansible_ssh_host=10.61.191.230 zookeeper_id=2 broker_id=2
+Kafka-cp3 ansible_ssh_host=10.61.191.231 zookeeper_id=3 broker_id=3
 
 [tools]
 tools1 ansible_ssh_host=10.13.31.16
-tools-cp1 ansible_ssh_host=10.13.31.20
+tools-cp1 ansible_ssh_host=10.61.191.122
+minikube1 ansible_ssh_host=10.61.191.71
 
+[mariadb]
+mariadb-01 ansible_ssh_host=10.61.191.135
+; mariadb2 ansible_ssh_host=10.126.145.105
+
+[elastic]
+elastic1 ansible_ssh_host=10.126.145.69
+
+[test]
+test-vm ansible_ssh_host=10.61.191.187 device_path=/dev/sdb1

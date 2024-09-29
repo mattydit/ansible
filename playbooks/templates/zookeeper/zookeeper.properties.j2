@@ -15,6 +15,6 @@ initLimit=10
 syncLimit=5
 # zoo servers
 # these hostnames such as `zookeeper-1` come from the /etc/hosts file
-server.1={{ hostvars['Kafka-cp1']['static_ip'].split('/')[0] }}:2888:3888
-server.2={{ hostvars['Kafka-cp2']['static_ip'].split('/')[0] }}:2888:3888
-server.3={{ hostvars['Kafka-cp3']['static_ip'].split('/')[0] }}:2888:3888
+server.1=10.61.191.118:2888:3888
+server.2=10.61.191.230:2888:3888
+server.3=10.61.191.231:2888:3888

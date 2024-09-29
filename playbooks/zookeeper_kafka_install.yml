@@ -15,7 +15,7 @@
           - vim
           - nano
           - tar
-          - netcat
+          - netcat-traditional
           - default-jdk
         state: present
         update_cache: true

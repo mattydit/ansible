@@ -1,6 +1,6 @@
 ---
 - name: Install Docker
-  hosts: tools
+  hosts: tools, docker
   become: true
 
   pre_tasks:
@@ -43,3 +43,6 @@
         groups:
           - docker
         append: true
+      tags: 
+        - user_permissions
+        - always

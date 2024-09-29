@@ -1,6 +1,6 @@
 ---
 - name: Copy the docker compose files
-  hosts: tools
+  hosts: tools, docker
   become: true
 
   tasks:

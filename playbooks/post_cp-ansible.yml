@@ -1,0 +1,13 @@
+---
+- name: Copy the properties files
+  hosts: kafka_broker
+  become: true
+
+  tasks:
+    - name: Copy command config
+      copy:
+        src: "./files/command-config.properties"
+        dest: "/etc/kafka/"
+        owner: "cp-kafka"
+        group: "confluent"
+        mode: '0755'

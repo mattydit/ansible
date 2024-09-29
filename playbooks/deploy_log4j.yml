@@ -1,0 +1,20 @@
+---
+- name: Deploy log4j properties
+  hosts: kafka_broker
+  become: true
+
+  tasks:
+
+  - name: log4j
+    template:
+      src: templates/log4j.properties
+      dest: /etc/kafka/log4j.properties
+      owner: cp-kafka
+      group: confluent
+      mode: '0640'
+
+  # - name: Replace rootLogger
+  #   replace:
+  #     path: "{{log4j_file}}"
+  #     regexp: 'log4j.rootLogger=.*'
+  #     replace: 'log4j.rootLogger={{log4j_root_logger}}'
