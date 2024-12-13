@@ -1,0 +1,1 @@
+kafkacat -b broker1:9093 -X security.protocol=SASL_SSL -X sasl.mechanism=PLAIN -X sasl.username=producer-test -X sasl.password=producer-secret -X ssl.keystore.location=/var/ssl/private/kafka_broker.keystore.jks -X ssl.keystore.password=confluentkeystorestorepass -X ssl.ca.location=/var/ssl/private/ca.crt -L
